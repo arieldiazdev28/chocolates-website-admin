@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PedidoController;
 
 // Ruta de acceso al modo administrador
 Route::get('/', function () {
@@ -24,8 +25,9 @@ Route::middleware('guest')->controller(AuthController::class)->group(function ()
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Rutas de acceso a la sección de productos
+
 Route::middleware('auth')->controller(ProductoController::class)->group(function () {
+    // Rutas de acceso a la sección de productos
     Route::get('/productos', 'index')->name('productos.index');
     Route::get('/productos/crear', 'create')->name('productos.create');
     Route::get('/productos/{id}', 'show')->name('productos.show');
@@ -36,9 +38,9 @@ Route::middleware('auth')->controller(ProductoController::class)->group(function
     Route::get('/productos/buscar', 'search')->name('productos.search');
 });
 
+Route::middleware('auth')->controller(PedidoController::class)->group(function () {
+    Route::get('/pedidos', 'index')->name('pedidos.index');
+    Route::post('/pedidos/{pedido}/estado', 'actualizarEstado')->name('pedidos.actualizarEstado');
+});
 
-// Rutas de acceso a la sección de pedidos
-Route::get('/pedidos', function () {
-    return view('pedidos.index');
-})->name('pedidos.index')->middleware('auth');
 
